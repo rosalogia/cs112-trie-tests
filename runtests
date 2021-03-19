@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -f test.log ] && rm test.log
+./gradlew test 2>/dev/null
+[ -f test.log ] && cat test.log
