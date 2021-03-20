@@ -1,3 +1,6 @@
+
+TRIE
+
  ---root
      |
           absence

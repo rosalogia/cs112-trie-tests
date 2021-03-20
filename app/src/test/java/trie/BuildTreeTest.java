@@ -1,13 +1,10 @@
 package trie;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,42 +28,20 @@ class BuildTreeTest {
     }
 
     private String trieString(TrieNode root, String[] words) {
-        String acc = "";
-        return print(root, 1, acc, words);
-    }
-
-    private static String print(TrieNode root, int indent, String acc, String[] words) {
-        if (root == null) {
-            return acc;
-        }
-        for (int i=0; i < indent-1; i++) {
-            acc += "    ";
-        }
-
-        if (root.substr != null) {
-            String pre = words[root.substr.wordIndex]
-                    .substring(0, root.substr.endIndex+1);
-            acc += "      " + pre + "\n";
-        }
-
-        for (int i=0; i < indent-1; i++) {
-            acc += "    ";
-        }
-        acc += " ---";
-        if (root.substr == null) {
-            acc += "root\n";
-        } else {
-            acc += root.substr + "\n";
-        }
-
-        for (TrieNode ptr=root.firstChild; ptr != null; ptr=ptr.sibling) {
-            for (int i=0; i < indent-1; i++) {
-                acc += "    ";
-            }
-            acc += "     |\n";
-            return print(ptr, indent+1, acc, words);
-        }
-        return acc;
+        // Create a stream to hold the output
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        // IMPORTANT: Save the old System.out!
+        PrintStream old = System.out;
+        // Tell Java to use your special stream
+        System.setOut(ps);
+        // Print some output: goes to your special stream
+        Trie.print(root, words);
+        // Put things back
+        System.out.flush();
+        System.setOut(old);
+        // Show what happened
+        return baos.toString();
     }
 
     @ParameterizedTest
