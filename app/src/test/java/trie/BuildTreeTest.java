@@ -41,7 +41,7 @@ class BuildTreeTest {
         System.out.flush();
         System.setOut(old);
         // Show what happened
-        return baos.toString();
+        return baos.toString().replace("\r", "");
     }
 
     @ParameterizedTest
